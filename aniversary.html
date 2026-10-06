@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Anniversary ke-1 Tahun! ❤️</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-gold': '#b76e79',
+                        'soft-pink': '#fff0f3',
+                        'deep-rose': '#ff4d6d',
+                        'romantic-cream': '#fffaf0',
+                        'blush': '#ffb3c1',
+                        'burgundy': '#590d22',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        cursive: ['Great Vibes', 'cursive'],
+                        handwriting: ['Caveat', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframe Animations */
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            pointer-events: none;
+            animation: floatHeart 8s infinite linear;
+        }
+
+        /* Envelope Animation CSS */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #ffb3c1;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out 0.3s, z-index 0.2s 0.3s;
+            z-index: 5;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .letter {
+            transition: transform 0.6s ease-in-out 0.4s, opacity 0.5s ease-in-out;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-40px);
+        }
+
+        /* Pulsing Glow Effect */
+        .glow-heart {
+            filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.6));
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.5)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 18px rgba(255, 77, 109, 0.8)); }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 179, 193, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb3c1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4d6d;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-soft-pink via-romantic-cream to-soft-pink text-gray-800 font-sans min-h-screen relative overflow-x-hidden selection:bg-deep-rose selection:text-white">
+
+    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+        <div id="audio-label" class="bg-white/90 text-xs font-semibold px-3 py-1.5 rounded-full shadow-md text-deep-rose hidden sm:block animate-bounce border border-rose-gold/30">
+            Putar Musik 🎵
+        </div>
+        <button id="music-toggle" onclick="toggleMusic()" class="w-12 h-12 rounded-full bg-gradient-to-r from-deep-rose to-rose-gold text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none">
+            <i id="music-icon" class="fas fa-music text-lg"></i>
+        </button>
+        <!-- Background Audio -->
+        <audio id="bg-music" loop preload="auto">
+            <source src="lagu.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 pt-10 pb-16 z-10">
+        <!-- Floating badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-blush/50 text-deep-rose font-medium text-sm mb-6 shadow-sm">
+            <i class="fas fa-sparkles text-amber-400"></i>
+            <span>Happy 1st Anniversary — 7 Oktober</span>
+            <i class="fas fa-sparkles text-amber-400"></i>
+        </div>
+
+        <!-- Main Title -->
+        <h1 class="font-cursive text-5xl sm:text-7xl md:text-8xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-deep-rose via-rose-gold to-burgundy mb-4 drop-shadow-sm leading-tight">
+            Selamat Anniversary ke-1 Tahun sayaangg! ❤️
+        </h1>
+
+        <p class="font-handwriting text-2xl sm:text-3xl md:text-4xl text-gray-700 max-w-2xl mb-8">
+            "365 hari yang penuh tawa, cinta, dan jutaan kenangan indah bersamamu."
+        </p>
+
+        <!-- Live Countdown / Counter Box -->
+        <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-xl max-w-xl w-full mb-10 border border-white/60">
+            <h3 class="text-sm uppercase tracking-widest text-rose-gold font-bold mb-4">
+                <i class="fas fa-hourglass-half mr-2"></i>Waktu Bersama Kita
+            </h3>
+            
+            <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                <div class="bg-white/80 p-3 sm:p-4 rounded-2xl border border-blush/30 shadow-inner">
+                    <span id="days" class="block font-extrabold text-2xl sm:text-4xl text-deep-rose">365</span>
+                    <span class="text-xs sm:text-sm text-gray-500 font-medium">Hari</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-2xl border border-blush/30 shadow-inner">
+                    <span id="hours" class="block font-extrabold text-2xl sm:text-4xl text-deep-rose">00</span>
+                    <span class="text-xs sm:text-sm text-gray-500 font-medium">Jam</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-2xl border border-blush/30 shadow-inner">
+                    <span id="minutes" class="block font-extrabold text-2xl sm:text-4xl text-deep-rose">00</span>
+                    <span class="text-xs sm:text-sm text-gray-500 font-medium">Menit</span>
+                </div>
+                <div class="bg-white/80 p-3 sm:p-4 rounded-2xl border border-blush/30 shadow-inner">
+                    <span id="seconds" class="block font-extrabold text-2xl sm:text-4xl text-deep-rose">00</span>
+                    <span class="text-xs sm:text-sm text-gray-500 font-medium">Detik</span>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-500 mt-4 italic">
+                Tercatat sejak 7 Oktober tahun lalu hingga detik ini ✨
+            </p>
+        </div>
+
+        <!-- Scroll down indicator -->
+        <a href="#letter-section" class="inline-flex flex-col items-center text-rose-gold hover:text-deep-rose transition-colors duration-300">
+            <span class="text-xs font-semibold mb-2 uppercase tracking-wider">Buka Kejutan</span>
+            <i class="fas fa-chevron-down text-xl animate-bounce"></i>
+        </a>
+    </section>
+
+    <!-- Surat Cinta Section -->
+    <section id="letter-section" class="py-20 px-4 relative z-10 max-w-4xl mx-auto text-center">
+        <div class="mb-12">
+            <span class="text-rose-gold uppercase text-xs tracking-widest font-bold">Pesan Dari Hatiku</span>
+            <h2 class="font-cursive text-4xl sm:text-5xl text-burgundy mt-1">Surat Cinta Untukmu 💌</h2>
+            <p class="text-gray-600 text-sm mt-2">Klik amplop di bawah ini untuk membukanya!</p>
+        </div>
+
+        <!-- Envelope Container -->
+        <div class="envelope-wrapper flex justify-center items-center">
+            <div id="envelope" onclick="openEnvelope()" class="envelope w-80 sm:w-96 bg-blush rounded-b-2xl shadow-2xl cursor-pointer p-6 relative border-t-0 hover:shadow-pink-200/50 transition-all">
+                <div class="flap"></div>
+
+                <div id="seal" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-deep-rose rounded-full flex items-center justify-center shadow-md transition-transform duration-300 hover:scale-110">
+                    <i class="fas fa-heart text-white text-xl glow-heart"></i>
+                </div>
+
+                <div class="h-44 flex items-end justify-center">
+                    <span id="click-hint" class="text-xs font-semibold text-deep-rose uppercase tracking-wider z-10 bg-white/80 px-3 py-1 rounded-full shadow-sm animate-pulse">
+                        Klik Untuk Buka ❤️️
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Letter Content -->
+        <div id="letter-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="glass-card max-w-lg w-full p-6 sm:p-8 rounded-3xl shadow-2xl text-left relative max-h-[85vh] overflow-y-auto border border-rose-gold/30 transform scale-95 transition-transform duration-300" id="letter-card">
+                
+                <button onclick="closeEnvelope()" class="absolute top-4 right-4 w-9 h-9 bg-gray-100 hover:bg-rose-100 rounded-full flex items-center justify-center text-gray-500 hover:text-deep-rose transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="text-center mb-6">
+                    <i class="fas fa-quote-left text-deep-rose/30 text-4xl mb-2"></i>
+                    <h3 class="font-cursive text-3xl sm:text-4xl text-burgundy">untuk my bini gueehh tercintaa</h3>
+                    <p class="text-xs text-rose-gold font-medium">7 Oktober 2026</p>
+                </div>
+
+                <div class="font-handwriting text-xl sm:text-2xl text-gray-800 leading-relaxed space-y-4">
+                    <p>Halo sayangku ❤️️,</p>
+                    <p>nggaa kerasa yaa, hari iniii tepatt satu tahun kita barengg", rasanyaa baru kemarenn loo kita pertama kali ngobrol senyumm" gajelass wkwk</p>
+                    <p>makasii yaaa sudah jadi tempat aku pulangg, udaaa selalu sabar ngertiinn aku, samaa udaaa mengisi harii" akuu dengan warna yang indah. pokonya semua momen yang sama kamuu ituu favorit aku semuaa</p>
+                    <p>Semoga kedepanyaaa, kita bisa terus saling menggenggamm tangannn, melewati suka dan duka bersama, dan makin sayang satu sama lain yaa okaaii sayaangg??</p>
+                    <p class="text-right font-bold text-deep-rose pt-2">Selamat Anniversary yang ke-1! Forever & Always ✨</p>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-rose-100 text-center">
+                    <button onclick="closeEnvelope()" class="px-6 py-2.5 bg-gradient-to-r from-deep-rose to-rose-gold text-white rounded-full font-semibold text-sm shadow-md hover:shadow-lg hover:scale-105 transition-all">
+                        Simpan Surat di Hati ❤️
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 px-4 relative z-10 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-rose-gold uppercase text-xs tracking-widest font-bold">Perjalanan Cinta Kita</span>
+            <h2 class="font-cursive text-4xl sm:text-5xl text-burgundy mt-1">Timeline Kenangan Indah ✨</h2>
+            <p class="text-gray-600 text-sm mt-2">Klik setiap kenangan untuk melihat cerita selengkapnya!</p>
+        </div>
+
+        <div class="relative border-l-2 border-blush md:border-l-0 md:before:absolute md:before:top-0 md:before:bottom-0 md:before:left-1/2 md:before:-translate-x-1/2 md:before:w-0.5 md:before:bg-blush space-y-12">
+            
+            <!-- Item 1 -->
+            <div class="relative flex flex-col md:flex-row items-center cursor-pointer group" onclick="openMemoryModal(0)">
+                <div class="absolute left-0 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-deep-rose text-white flex items-center justify-center shadow-lg border-4 border-white group-hover:scale-125 transition-transform duration-300 z-10">
+                    <i class="fas fa-sparkles text-sm"></i>
+                </div>
+                <div class="ml-12 md:ml-0 md:w-1/2 md:pr-12 text-left md:text-right w-full">
+                    <div class="glass-card p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-blush/40">
+                        <span class="inline-block px-3 py-1 bg-soft-pink text-deep-rose text-xs font-bold rounded-full mb-2">Awal Mula</span>
+                        <h3 class="font-bold text-lg text-burgundy">Pertama Kali Ketemu</h3>
+                        <p class="text-xs text-gray-500 mb-2">Momen canggung tapi manis yang gak pernah aku lupain...</p>
+                        <span class="text-xs text-rose-gold font-semibold flex items-center gap-1 justify-start md:justify-end">
+                            Lihat Foto & Catatan <i class="fas fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative flex flex-col md:flex-row items-center cursor-pointer group md:flex-row-reverse" onclick="openMemoryModal(1)">
+                <div class="absolute left-0 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-deep-rose text-white flex items-center justify-center shadow-lg border-4 border-white group-hover:scale-125 transition-transform duration-300 z-10">
+                    <i class="fas fa-coffee text-sm"></i>
+                </div>
+                <div class="ml-12 md:ml-0 md:w-1/2 md:pl-12 text-left w-full">
+                    <div class="glass-card p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-blush/40">
+                        <span class="inline-block px-3 py-1 bg-soft-pink text-deep-rose text-xs font-bold rounded-full mb-2">Kencan Pertama</span>
+                        <h3 class="font-bold text-lg text-burgundy">First Date yang Canggung</h3>
+                        <p class="text-xs text-gray-500 mb-2">Waktu kita ngobrol berjam-jam sampai lupa waktu...</p>
+                        <span class="text-xs text-rose-gold font-semibold flex items-center gap-1">
+                            Lihat Foto & Catatan <i class="fas fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="relative flex flex-col md:flex-row items-center cursor-pointer group" onclick="openMemoryModal(2)">
+                <div class="absolute left-0 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-deep-rose text-white flex items-center justify-center shadow-lg border-4 border-white group-hover:scale-125 transition-transform duration-300 z-10">
+                    <i class="fas fa-heart text-sm"></i>
+                </div>
+                <div class="ml-12 md:ml-0 md:w-1/2 md:pr-12 text-left md:text-right w-full">
+                    <div class="glass-card p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-blush/40">
+                        <span class="inline-block px-3 py-1 bg-soft-pink text-deep-rose text-xs font-bold rounded-full mb-2">Resmi Jadian</span>
+                        <h3 class="font-bold text-lg text-burgundy">Hari Kita Jadian</h3>
+                        <p class="text-xs text-gray-500 mb-2">Hari paling membahagiakan di mana kamu bilang 'Ya'...</p>
+                        <span class="text-xs text-rose-gold font-semibold flex items-center gap-1 justify-start md:justify-end">
+                            Lihat Foto & Catatan <i class="fas fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="relative flex flex-col md:flex-row items-center cursor-pointer group md:flex-row-reverse" onclick="openMemoryModal(3)">
+                <div class="absolute left-0 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-deep-rose text-white flex items-center justify-center shadow-lg border-4 border-white group-hover:scale-125 transition-transform duration-300 z-10">
+                    <i class="fas fa-flag text-sm"></i>
+                </div>
+                <div class="ml-12 md:ml-0 md:w-1/2 md:pl-12 text-left w-full">
+                    <div class="glass-card p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-blush/40">
+                        <span class="inline-block px-3 py-1 bg-soft-pink text-deep-rose text-xs font-bold rounded-full mb-2">Milestone</span>
+                        <h3 class="font-bold text-lg text-burgundy">1 Tahun Bersama (7 Okt)</h3>
+                        <p class="text-xs text-gray-500 mb-2">Awal dari babak baru kisah cinta kita yang lebih indah...</p>
+                        <span class="text-xs text-rose-gold font-semibold flex items-center gap-1">
+                            Lihat Foto & Catatan <i class="fas fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Reasons Why I Love You Section -->
+    <section class="py-20 px-4 relative z-10 max-w-2xl mx-auto text-center">
+        <div class="glass-card p-8 sm:p-10 rounded-3xl shadow-xl border border-blush/50 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-blush/30 rounded-full blur-2xl"></div>
+            <div class="absolute -left-10 -top-10 w-32 h-32 bg-deep-rose/20 rounded-full blur-2xl"></div>
+
+            <i class="fas fa-hand-holding-heart text-4xl text-deep-rose mb-3 glow-heart"></i>
+            <h2 class="font-cursive text-4xl text-burgundy mb-2">Alasan Aku Sayang Kamu 💕</h2>
+            <p class="text-xs text-gray-500 mb-6">Setiap kali kamu klik tombol di bawah, ada alasan baru yang akan muncul!</p>
+
+            <div class="min-h-[100px] flex items-center justify-center bg-white/70 rounded-2xl p-6 border border-rose-gold/20 shadow-inner mb-6">
+                <p id="love-reason" class="font-handwriting text-2xl sm:text-3xl text-gray-800 transition-all duration-300">
+                    "Klik tombol di bawah untuk melihat alasannya..."
+                </p>
+            </div>
+
+            <button onclick="nextReason()" class="px-8 py-3.5 bg-gradient-to-r from-deep-rose via-rose-gold to-burgundy text-white font-semibold rounded-full shadow-lg hover:shadow-pink-300/50 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 mx-auto">
+                <span>Klik Untuk Lihat Alasan</span>
+                <i class="fas fa-heart text-sm"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- FITUR LUCU 1: KUIS TOMBOL "KABUR" -->
+    <section class="py-12 px-4 relative z-10 max-w-2xl mx-auto text-center">
+        <div class="glass-card p-8 rounded-3xl shadow-xl border border-blush/50 relative overflow-hidden">
+            <h2 class="font-cursive text-4xl text-burgundy mb-2">Pertanyaan Penting! 🙈</h2>
+            <p class="text-xs text-gray-500 mb-6">Jawab yang jujur yaa sayang...</p>
+            <p class="font-bold text-xl text-deep-rose mb-8">Kamu sayang nggak sama aku?</p>
+
+            <div class="flex justify-center items-center gap-4 min-h-[70px] relative" id="quiz-container">
+                <button onclick="sayangBanget()" class="px-8 py-3 bg-deep-rose text-white font-bold rounded-full shadow-lg hover:scale-110 transition-all z-10">
+                    Sayang Banget! ❤️
+                </button>
+                <button id="btn-no" onmouseover="moveButton()" onclick="moveButton()" class="px-8 py-3 bg-gray-300 text-gray-700 font-bold rounded-full transition-all duration-150 absolute">
+                    Nggak 😜
+                </button>
+            </div>
+            <p id="quiz-response" class="font-handwriting text-2xl text-burgundy mt-4 hidden animate-bounce"></p>
+        </div>
+    </section>
+
+    <!-- FITUR LUCU 2: KUPON CINTA (LOVE COUPONS) -->
+    <section class="py-12 px-4 relative z-10 max-w-4xl mx-auto text-center">
+        <span class="text-rose-gold uppercase text-xs tracking-widest font-bold">Hadiah Spesial</span>
+        <h2 class="font-cursive text-4xl text-burgundy mt-1 mb-8">Kupon Cinta Anniversary 🎟️</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Kupon 1 -->
+            <div class="glass-card p-6 rounded-2xl border-2 border-dashed border-deep-rose/40 relative flex flex-col justify-between hover:shadow-lg transition-shadow">
+                <div>
+                    <span class="text-[10px] font-bold text-deep-rose uppercase bg-soft-pink px-3 py-1 rounded-full">Kupon #1</span>
+                    <h3 class="font-bold text-lg text-burgundy mt-3">Free Hugs 24/7 🫂</h3>
+                    <p class="text-xs text-gray-500 mt-2">Bisa ditukar dengan pelukan hangat kapan aja kamu mau!</p>
+                </div>
+                <button onclick="claimCoupon(this)" class="mt-6 w-full py-2.5 bg-gradient-to-r from-deep-rose to-rose-gold text-white font-semibold text-xs rounded-xl shadow hover:scale-105 transition-all">
+                    Klaim Kupon 🎟️
+                </button>
+            </div>
+
+            <!-- Kupon 2 -->
+            <div class="glass-card p-6 rounded-2xl border-2 border-dashed border-deep-rose/40 relative flex flex-col justify-between hover:shadow-lg transition-shadow">
+                <div>
+                    <span class="text-[10px] font-bold text-deep-rose uppercase bg-soft-pink px-3 py-1 rounded-full">Kupon #2</span>
+                    <h3 class="font-bold text-lg text-burgundy mt-3">Bebas Minta Makanan 🧋</h3>
+                    <p class="text-xs text-gray-500 mt-2">Bebas minta ditraktir seblak, boba, atau makanan kesukaanmu!</p>
+                </div>
+                <button onclick="claimCoupon(this)" class="mt-6 w-full py-2.5 bg-gradient-to-r from-deep-rose to-rose-gold text-white font-semibold text-xs rounded-xl shadow hover:scale-105 transition-all">
+                    Klaim Kupon 🎟️
+                </button>
+            </div>
+
+            <!-- Kupon 3 -->
+            <div class="glass-card p-6 rounded-2xl border-2 border-dashed border-deep-rose/40 relative flex flex-col justify-between hover:shadow-lg transition-shadow">
+                <div>
+                    <span class="text-[10px] font-bold text-deep-rose uppercase bg-soft-pink px-3 py-1 rounded-full">Kupon #3</span>
+                    <h3 class="font-bold text-lg text-burgundy mt-3">Nurut Seharian 👑</h3>
+                    <p class="text-xs text-gray-500 mt-2">Aku bakal nurut semua kemauan kamu seharian penuh!</p>
+                </div>
+                <button onclick="claimCoupon(this)" class="mt-6 w-full py-2.5 bg-gradient-to-r from-deep-rose to-rose-gold text-white font-semibold text-xs rounded-xl shadow hover:scale-105 transition-all">
+                    Klaim Kupon 🎟️
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FITUR LUCU 3: MOOD BOOSTER BOX -->
+    <section class="py-12 px-4 relative z-10 max-w-2xl mx-auto text-center">
+        <div class="glass-card p-8 rounded-3xl shadow-xl border border-blush/50">
+            <span class="text-rose-gold uppercase text-xs tracking-widest font-bold">Pencet Kapan Aja</span>
+            <h2 class="font-cursive text-4xl text-burgundy mt-1 mb-3">Mood Booster Box 💌</h2>
+            <p class="text-xs text-gray-500 mb-6">Pilih suasana hati kamu sekarang:</p>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="showMoodMessage('kangen')" class="p-3 bg-white/80 rounded-2xl border border-blush/40 hover:bg-soft-pink transition-all font-semibold text-xs text-burgundy">
+                    🥺 Lagi Kangen
+                </button>
+                <button onclick="showMoodMessage('capek')" class="p-3 bg-white/80 rounded-2xl border border-blush/40 hover:bg-soft-pink transition-all font-semibold text-xs text-burgundy">
+                    😮‍💨 Lagi Capek
+                </button>
+                <button onclick="showMoodMessage('marah')" class="p-3 bg-white/80 rounded-2xl border border-blush/40 hover:bg-soft-pink transition-all font-semibold text-xs text-burgundy">
+                    😤 Lagi Sebal / Marah
+                </button>
+                <button onclick="showMoodMessage('butuh_semangat')" class="p-3 bg-white/80 rounded-2xl border border-blush/40 hover:bg-soft-pink transition-all font-semibold text-xs text-burgundy">
+                    ✨ Butuh Semangat
+                </button>
+            </div>
+
+            <div id="mood-box" class="min-h-[80px] bg-white/90 p-4 rounded-2xl border border-rose-gold/20 flex items-center justify-center text-center hidden">
+                <p id="mood-text" class="font-handwriting text-2xl text-burgundy"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Memory Modal -->
+    <div id="memory-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-card max-w-md w-full p-6 rounded-3xl shadow-2xl relative text-center border border-white/60 transform scale-95 transition-transform duration-300" id="memory-card">
+            
+            <button onclick="closeMemoryModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-rose-100 rounded-full flex items-center justify-center text-gray-500 hover:text-deep-rose transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="w-full h-52 rounded-2xl overflow-hidden mb-4 bg-gray-100 shadow-inner relative group">
+                <img id="modal-img" src="moment1.jpeg" alt="Kenangan" class="w-full h-full object-cover">
+            </div>
+
+            <span id="modal-tag" class="px-3 py-1 bg-soft-pink text-deep-rose text-xs font-bold rounded-full inline-block mb-2">Category</span>
+            <h3 id="modal-title" class="font-bold text-2xl text-burgundy mb-2">Memory Title</h3>
+            <p id="modal-desc" class="font-handwriting text-xl text-gray-700 leading-relaxed">Memory description here...</p>
+        </div>
+    </div>
+
+    <footer class="py-12 text-center relative z-10 text-gray-500 text-xs border-t border-blush/30">
+        <p class="font-medium">Dibuat khusus dengan <i class="fas fa-heart text-deep-rose animate-pulse"></i> untuk kamu tersayang.</p>
+        <p class="mt-1 text-gray-400">Happy 1st Anniversary • 7 Oktober</p>
+    </footer>
+
+    <script>
+        // --- 1. Floating Hearts Animation ---
+        function createHearts() {
+            const container = document.getElementById('particles-container');
+            const heartsCount = 20;
+            const icons = ['fa-heart', 'fa-sparkles', 'fa-heart text-pink-300'];
+
+            for (let i = 0; i < heartsCount; i++) {
+                const heart = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                heart.className = `fas ${randomIcon} floating-heart text-deep-rose/40`;
+                
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${Math.random() * 1.5 + 0.8}rem`;
+                heart.style.animationDuration = `${Math.random() * 5 + 6}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // --- 2. Live Counter ---
+        function updateCounter() {
+            const now = new Date();
+            let startDate = new Date(now.getFullYear() - 1, 9, 7, 0, 0, 0);
+
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // --- 3. Audio Player ---
+        let isPlaying = false;
+        const audio = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('music-icon');
+        const audioLabel = document.getElementById('audio-label');
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.className = 'fas fa-music text-lg';
+                audioLabel.innerText = 'Putar Musik 🎵';
+            } else {
+                audio.play().then(() => {
+                    musicIcon.className = 'fas fa-pause text-lg';
+                    audioLabel.innerText = 'Musik Diputar 💖';
+                }).catch(e => {
+                    console.log("Audio play blocked:", e);
+                });
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // --- 4. Envelope Letter ---
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const modal = document.getElementById('letter-modal');
+            const card = document.getElementById('letter-card');
+
+            envelope.classList.add('open');
+
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 500);
+        }
+
+        function closeEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const modal = document.getElementById('letter-modal');
+            const card = document.getElementById('letter-card');
+
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+
+            setTimeout(() => {
+                envelope.classList.remove('open');
+            }, 300);
+        }
+
+        // --- 5. Timeline Memories Data ---
+        const memories = [
+            {
+                tag: "Awal Mula",
+                title: "Pertama Kali Ketemu",
+                desc: "waktu itu kita pertamaa kali ketemu tuhh dii bima kann yaa wkwk ngobrol di sheter sampe kamu pulang malemm wkwk",
+                img: "moment1.jpeg"
+            },
+            {
+                tag: "Kencan Pertama",
+                title: "First Date yang Membekas",
+                desc: "first date tuhh kita dii haus kann yaa pertama kali tuu wkwk sambill ngeliatt pemandangann UINSSC wkwkk",
+                img: "moment2.jpeg"
+            },
+            {
+                tag: "Resmi Jadian",
+                title: "Hari Kita Jadian",
+                desc: "tanggal 7 Oktober, hari paling bersejarah pass kamu resmi jadi punyaa akuu, momenn paling spesiall pokonyaaa",
+                img: "moment4.jpeg"
+            },
+            {
+                tag: "1 Tahun Bersama",
+                title: "Hari Ini & Selamanya",
+                desc: "akhirnya sampe sekarang, pas bangett satu tahun hubungann kita yahh sayangg dii tanggal 7 oktober inii, makasih yaa udaa selaluu ada buat akuu ❤️",
+                img: "moment3.jpeg"
+            }
+        ];
+
+        function openMemoryModal(index) {
+            const memory = memories[index];
+            document.getElementById('modal-tag').innerText = memory.tag;
+            document.getElementById('modal-title').innerText = memory.title;
+            document.getElementById('modal-desc').innerText = memory.desc;
+            document.getElementById('modal-img').src = memory.img;
+
+            const modal = document.getElementById('memory-modal');
+            const card = document.getElementById('memory-card');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeMemoryModal() {
+            const modal = document.getElementById('memory-modal');
+            const card = document.getElementById('memory-card');
+
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // --- 6. Love Reasons Generator ---
+        const loveReasons = [
+            "Senyum kamu selaluu jadii obatt capee akuuu😊",
+            "kamuu selaluu sabarr ngadepinn sikapp akuu yang ngeselinn iniii",
+            "kamujugaa selaluu merhatiinn hal hall kecill akuuuu",
+            "kamuu selaluu jadii penyemangatt akuu kalo akuu lagii kegiatannn✨",
+            "kamuu selaluu jadii tempatt nyamaann akuu kaloo akuu lagii adaa apa apaa 🏡",
+            "suara kamuu adalahh suaraa favoritt akuu yang aku dengerr tiapp hariii 🎵",
+            "kamujugaa selaluu pedulii samaa akuuu 🤝",
+            "intinyaa sama kamuu adalahh versii terbaik dii hidupp akuuu 🌟"
+        ];
+
+        let currentReasonIndex = 0;
+
+        function nextReason() {
+            const reasonElement = document.getElementById('love-reason');
+            
+            reasonElement.style.opacity = '0';
+            reasonElement.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                reasonElement.innerText = `"${loveReasons[currentReasonIndex]}"`;
+                currentReasonIndex = (currentReasonIndex + 1) % loveReasons.length;
+                
+                reasonElement.style.opacity = '1';
+                reasonElement.style.transform = 'translateY(0)';
+            }, 200);
+        }
+
+        // --- 7. Fitur Tombol Kabur ---
+        function moveButton() {
+            const btnNo = document.getElementById('btn-no');
+            const container = document.getElementById('quiz-container');
+            
+            const x = Math.random() * (container.clientWidth - btnNo.clientWidth - 20);
+            const y = Math.random() * (container.clientHeight - btnNo.clientHeight - 20);
+            
+            btnNo.style.position = 'absolute';
+            btnNo.style.left = `${x}px`;
+            btnNo.style.top = `${y}px`;
+        }
+
+        function sayangBanget() {
+            const response = document.getElementById('quiz-response');
+            response.innerText = "akujugaaa sayaangg samaa kamuuuu!! ❤️🥰🥰";
+            response.classList.remove('hidden');
+            document.getElementById('quiz-container').style.display = 'none';
+        }
+
+        // --- 8. Fitur Klaim Kupon ---
+        function claimCoupon(button) {
+            button.innerText = "Sudah Diklaim! 💖";
+            button.disabled = true;
+            button.className = "mt-6 w-full py-2.5 bg-gray-300 text-gray-500 font-semibold text-xs rounded-xl cursor-not-allowed";
+        }
+
+        // --- 9. Fitur Mood Booster Box ---
+        const moodMessages = {
+            kangen: "samaa sayangg akujugaa kangenn bangett samaa kamuuu kooo ❤️",
+            capek: "istirahatt yahh sayaanggg, sambill call yukkk sambill hug jugaa 🫂",
+            marah: "ututuuu cayaangg udaa yaahh jangann marahhhh akuu mintaa maaff yaaahh, kalo marahh teruss cepett tua loo😜❤️",
+            butuh_semangat: "semangaatt teruss yahh sayanggg, kamuu ngga sendiriann kooo, adaa akuuu sayaangg🔥✨"
+        };
+
+        function showMoodMessage(type) {
+            const box = document.getElementById('mood-box');
+            const text = document.getElementById('mood-text');
+            
+            text.innerText = moodMessages[type];
+            box.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
